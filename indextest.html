@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Halloween Festival</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/L.Control.MousePosition.css">
+    <script src="scripts/leaflet.js" type="text/javascript"></script>
+    <script src="scripts/L.Control.MousePosition.js" type="text/javascript"></script>
+
+    <style>
+      html, body, #map { width:100%; height:100%; margin:0; padding:0; z-index: 1; background: black; }
+      
+      .marker-base {
+        z-index: 500; /* Example base z-index value */
+      }
+      
+      #legend {
+        position: absolute;
+        bottom: 20px; /* Adjust position from the bottom */
+        right: 20px;  /* Adjust position from the right */
+        z-index: 1000; /* Ensure it is on top of the map */
+        width: 300px; /* Adjust the size if needed */
+        height: auto; /* Keep aspect ratio */
+      }
+      
+      /* General Popup Content Styling */
+      .leaflet-popup-content-wrapper {
+          background: black; /* Black background for the content area */
+          border-color: black; /* Black border for the popup */
+      }
+
+      .leaflet-popup-content {
+          color: black; /* Black text color */
+      }
+
+      .leaflet-popup-content img {
+          display: block;
+          margin-bottom: 10px; /* Space between the image and the link */
+      }
+
+      /* Custom Image Link Styling */
+      .leaflet-popup-content .ticket-link img {
+          width: 200px; /* Adjust the width of the ticket image */
+          height: auto; /* Maintain aspect ratio */
+          border-radius: 10px; /* Optional: Add rounded corners */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <img id="legend" src="icons/legend.png" alt="Legend">
+    <script type="text/javascript">
+      var mapExtent = [0.00000000, -5737.00000000, 8192.00000000, 0.00000000];
+      var mapMinZoom = 0;
+      var mapMaxZoom = 4;
+      var mapMaxResolution = 1.00000000;
+      var mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
+      var tileExtent = [0.00000000, -5737.00000000, 8192.00000000, 0.00000000];
+      var crs = L.CRS.Simple;
+      crs.transformation = new L.Transformation(1, -tileExtent[0], -1, tileExtent[3]);
+      crs.scale = function(zoom) {
+        return Math.pow(2, zoom) / mapMinResolution;
+      };
+      crs.zoom = function(scale) {
+        return Math.log(scale * mapMinResolution) / Math.LN2;
+      };
+      var layer;
+      var map = new L.Map('map', {
+          maxZoom: mapMaxZoom,
+          minZoom: mapMinZoom,
+          crs: L.CRS.Simple,
+          attributionControl: false
+        });
+        
+      layer = L.tileLayer('{z}/{x}/{y}.png', {
+          minZoom: mapMinZoom, maxZoom: mapMaxZoom,
+          tileSize: L.point(512, 512),
+          noWrap: true,
+          tms: false
+        }).addTo(map);
+      map.fitBounds([
+        crs.unproject(L.point(mapExtent[2], mapExtent[3])),
+        crs.unproject(L.point(mapExtent[0], mapExtent[1]))
+      ]);
+      L.control.mousePosition().addTo(map);
+      
+      // Icons 
+      var gateIcon = L.icon({
+        iconUrl: 'icons/gateicon.png', // Path to the image
+        iconSize: [45, 58], // Size of the icon
+        iconAnchor: [22, 29], // Point of the icon which will correspond to marker's location
+        popupAnchor: [0, 0] // Point from which the popup should open relative to the iconAnchor
+       });
+      
+      // Attraction Markers
+      var blasterMarker = L.marker([-3116, 6110], { icon: gateIcon }).addTo(map);
+      blasterMarker.bindPopup(
+        '<img src="images/blaster.png" alt="Blaster" style="width: 300px; height: auto;">' +
+        '<br>' +
+        '<a href="https://okcastle.com/elementor-308863/" target="_blank" class="ticket-link">' +
+        '<img src="images/tickets.png" alt="Purchase Tickets">' +
+        '</a>'
+      );
+      
+      var domusMarker = L.marker([-2327, 6845], { icon: gateIcon }).addTo(map);
+      domusMarker.bindPopup('Domus Horrificus');
+      
+      var tortureMarker = L.marker([-2327, 6598], { icon: gateIcon }).addTo(map);
+      tortureMarker.bindPopup('Torture Chamber');
+          
+      var casaMarker = L.marker([-1454, 7500], { icon: gateIcon }).addTo(map);
+      casaMarker.bindPopup('Casa Morte');
+      
+      var hayrideMarker = L.marker([-1576, 5195], { icon: gateIcon }).addTo(map);
+      hayrideMarker.bindPopup('Haunted Hayride'); 
+      
+      var trailMarker = L.marker([-4342, 3225], { icon: gateIcon }).addTo(map);
+      trailMarker.bindPopup('Trail of Blood'); 
+      
+      var jesterMarker = L.marker([-4610, 2635], { icon: gateIcon }).addTo(map);
+      jesterMarker.bindPopup("Jester's Revenge"); 
+      
+      var paintballMarker = L.marker([-772, 4765], { icon: gateIcon }).addTo(map);
+      paintballMarker.bindPopup('Zombie Paintball'); 
+      
+      var trainMarker = L.marker([-3100, 1280], { icon: gateIcon }).addTo(map);
+      trainMarker.bindPopup('Enchanted Train'); 
+      
+      var mazeMarker = L.marker([-2995, 2955], { icon: gateIcon }).addTo(map);
+      mazeMarker.bindPopup('Ultimate Maze'); 
+      
+      // z-index
+      food1Marker.getElement().style.zIndex = '2';
+      food2Marker.getElement().style.zIndex = '1';
+      food3Marker.getElement().style.zIndex = '3';
+      food4Marker.getElement().style.zIndex = '4';
+      pub1Marker.getElement().style.zIndex = '5';
+      
+    </script>
+  </body>
+</html>
